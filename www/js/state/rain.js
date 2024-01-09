@@ -1,21 +1,16 @@
 
-// import {oneOf} from './stochastic.js';
-const {oneOf} = require("./stochastic.js");
+import {oneOf} from '../utils/stochastic.js';
 
-const WIDTH = 10;
-const HEIGHT = 10;
-const DEPTH = 10;
-
-const toDrop = ({x, y, z}) => {
+export const toDrop = ({x, y, z}) => {
   return x + "|" + y + "|" + z;
 };
-const fromDrop = (drop) => {
-  vals = drop.split("|");
-  p = parseInt;
+export const fromDrop = (drop) => {
+  const vals = drop.split("|");
+  const p = parseInt;
   return {x: p(vals[0]), y: p(vals[1]), z: p(vals[2])};
 }
 
-const initWater = (depth) => {
+export const initWater = (depth) => {
   const water = [];
   for (let z = 0; z < depth; z++) {
     water.push({});
@@ -23,21 +18,11 @@ const initWater = (depth) => {
   return water;
 }
 
-const countWater = (water) => {
-  let count = 0;
-  for (let z = 0; z < water.length; z++) {
-    for (const drop in water[z]) {
-      count++;
-    }
-  }
-  return count;
-}
-
-const addDrop = (water, x, y, z) => {
+export const addDrop = (water, x, y, z) => {
   water[z][toDrop({x, y, z})] = "O";
 };
 
-const flowWater = (water, topo) => {
+export const flowWater = (water, topo) => {
   const nextWater = initWater(water.length);
   for (let z = 0; z < water.length; z++) {
     for (const drop in water[z]) {
@@ -123,34 +108,48 @@ const toString = (water, topo) => {
   return str.trim();
 }
 
-
-
-
-
-let water = initWater(DEPTH);
-
-const topo = [
-  [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-  [9, 2, 1, 1, 1, 1, 1, 1, 1, 9],
-  [9, 3, 4, 1, 1, 1, 1, 2, 1, 9],
-  [9, 4, 5, 2, 1, 1, 8, 2, 1, 9],
-  [9, 5, 6, 3, 2, 1, 8, 2, 1, 9],
-  [9, 6, 7, 4, 3, 2, 8, 2, 1, 9],
-  [9, 7, 8, 8, 8, 3, 8, 2, 1, 9],
-  [9, 8, 9, 9, 9, 4, 8, 2, 2, 9],
-  [9, 9, 8, 8, 8, 8, 8, 8, 8, 9],
-  [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-];
-
-// addDrop(water, 1, 7, 8);
-// console.log(toString(water, topo));
-// console.log(water);
-
-for (let i = 0; i < 150; i++) {
-  addDrop(water, 1, 7, 9);
-  water = flowWater(water, topo);
-  console.log(toString(water, topo));
-  console.log(countWater(water));
+const countWater = (water) => {
+  let count = 0;
+  for (let z = 0; z < water.length; z++) {
+    for (const drop in water[z]) {
+      count++;
+    }
+  }
+  return count;
 }
+
+
+
+
+
+// const WIDTH = 10;
+// const HEIGHT = 10;
+// const DEPTH = 10;
+
+// let water = initWater(DEPTH);
+//
+// const topo = [
+//   [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
+//   [9, 2, 1, 1, 1, 1, 1, 1, 1, 9],
+//   [9, 3, 4, 1, 1, 1, 1, 2, 1, 9],
+//   [9, 4, 5, 2, 1, 1, 8, 2, 1, 9],
+//   [9, 5, 6, 3, 2, 1, 8, 2, 1, 9],
+//   [9, 6, 7, 4, 3, 2, 8, 2, 1, 9],
+//   [9, 7, 8, 8, 8, 3, 8, 2, 1, 9],
+//   [9, 8, 9, 9, 9, 4, 8, 2, 2, 9],
+//   [9, 9, 8, 8, 8, 8, 8, 8, 8, 9],
+//   [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
+// ];
+//
+// // addDrop(water, 1, 7, 8);
+// // console.log(toString(water, topo));
+// // console.log(water);
+//
+// for (let i = 0; i < 150; i++) {
+//   addDrop(water, 1, 7, 9);
+//   water = flowWater(water, topo);
+//   console.log(toString(water, topo));
+//   console.log(countWater(water));
+// }
 // console.log(water);
 // console.log(countWater(water));

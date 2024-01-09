@@ -1,11 +1,7 @@
 import StatefulHTML from './StatefulHTML.js';
-import {encodePos} from '../utils/positions.js';
 import {config} from '../config.js';
-import {
-  getPieceGroupIndex, getNumLiberties,
-} from '../selectors/goSelectors.js';
 import {mouseToGrid} from '../selectors/mouseSelectors.js';
-import {dropPiece} from '../thunks/thunks.js';
+import {fromDrop} from '../state/rain.js';
 
 export default class GameBoard extends StatefulHTML {
   endTurnInterval = null;
@@ -34,7 +30,7 @@ export default class GameBoard extends StatefulHTML {
 
   render(state, canvas) {
     if (!canvas) return;
-    const {width, height} = state;
+    const {width, height, topo, water} = state;
 
     const ctx = canvas.getContext("2d");
     const sqSize = canvas.width / width;
@@ -42,21 +38,23 @@ export default class GameBoard extends StatefulHTML {
     ctx.fillStyle="tan";
     ctx.fillRect(0,0,canvas.width,canvas.height);
 
-    // grid lines
-    ctx.beginPath();
-    for (let x = 1; x < width; x++) {
-      ctx.strokeStyle = "black";
-      ctx.moveTo(x * sqSize, sqSize);
-      ctx.lineTo(x * sqSize, canvas.height - sqSize);
+    // topo
+    for (let y = 0; y < topo.length; y++) {
+      const row = [];
+      for (let x = 0; x < topo[y].length; x++) {
+        ctx.fillStyle = config.topoColors[topo[y][x]];
+        ctx.fillRect(x * sqSize, y * sqSize, sqSize, sqSize);
+      }
     }
-    ctx.stroke();
-    ctx.beginPath();
-    for (let y = 1; y < height; y++) {
-      ctx.strokeStyle = "black";
-      ctx.moveTo(sqSize, y * sqSize);
-      ctx.lineTo(canvas.width - sqSize, y * sqSize);
+
+    // water
+    ctx.fillStyle = "steelblue";
+    for (let z = 0; z < water.length; z++) {
+      for (const drop in water[z]) {
+        const {x, y} = fromDrop(drop);
+        ctx.fillRect(x * sqSize, y * sqSize, sqSize, sqSize);
+      }
     }
-    ctx.stroke();
 
   }
 

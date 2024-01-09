@@ -4,21 +4,21 @@ const {floor, sqrt, random, round} = Math;
 const rand = () => random();
 
 // return an integer between min and max, inclusive
-const randomIn = (min, max) => floor(min + rand() * (max - min + 1));
+export const randomIn = (min, max) => floor(min + rand() * (max - min + 1));
 
 const shamefulGaussian = () => (rand() + rand() + rand() + rand() + rand() + rand() - 3) / 3;
-const normalIn = (min, max) => {
+export const normalIn = (min, max) => {
   const gaussian = (shamefulGaussian() + 1) / 2;
   return floor(min + gaussian * (max - min + 1));
 };
 
-const oneOf = (options) => {
+export const oneOf = (options) => {
   if (options.length === 0) return null;
   return options[floor(rand() * options.length)];
 };
 
 // weights must be positive
-const weightedOneOf = (options, weights) => {
+export const weightedOneOf = (options, weights) => {
   const cumulativeWeights = [];
   let sum = 0;
 
@@ -35,12 +35,4 @@ const weightedOneOf = (options, weights) => {
   return options[index];
 };
 
-const out = {
-  oneOf,
-  randomIn,
-  weightedOneOf,
-  normalIn,
-};
-
-module.exports = out;
 
