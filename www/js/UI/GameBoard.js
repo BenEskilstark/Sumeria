@@ -1,7 +1,7 @@
 import StatefulHTML from './StatefulHTML.js';
 import {config} from '../config.js';
 import {mouseToGrid} from '../selectors/mouseSelectors.js';
-import {fromDrop} from '../state/rain.js';
+import {fromDrop, toDrop} from '../state/rain.js';
 
 export default class GameBoard extends StatefulHTML {
   endTurnInterval = null;
@@ -33,7 +33,8 @@ export default class GameBoard extends StatefulHTML {
     const {width, height, topo, water} = state;
 
     const ctx = canvas.getContext("2d");
-    const sqSize = canvas.width / width;
+    const sqWidth = canvas.width / width;
+    const sqHeight = canvas.height / height;
 
     ctx.fillStyle="tan";
     ctx.fillRect(0,0,canvas.width,canvas.height);
@@ -43,7 +44,7 @@ export default class GameBoard extends StatefulHTML {
       const row = [];
       for (let x = 0; x < topo[y].length; x++) {
         ctx.fillStyle = config.topoColors[topo[y][x]];
-        ctx.fillRect(x * sqSize, y * sqSize, sqSize, sqSize);
+        ctx.fillRect(x * sqWidth, y * sqHeight, sqWidth, sqHeight);
       }
     }
 
@@ -52,7 +53,7 @@ export default class GameBoard extends StatefulHTML {
     for (let z = 0; z < water.length; z++) {
       for (const drop in water[z]) {
         const {x, y} = fromDrop(drop);
-        ctx.fillRect(x * sqSize, y * sqSize, sqSize, sqSize);
+        ctx.fillRect(x * sqWidth, y * sqHeight, sqWidth, sqHeight);
       }
     }
 
@@ -64,7 +65,11 @@ export default class GameBoard extends StatefulHTML {
   //////////////////////////////////////////////////////////////////
 
   canvasClick(ev) {
-    const {realtime, clientID} = this.getState();
+    const state = this.getState();
+    const {x, y} = mouseToGrid(state, ev, this.querySelector("canvas"));
+
+    const mode = this.getClickMode();
+    this.dispatch({type: mode, x, y, z: config.depth - 1});
   }
 
   canvasMouseDown(ev) {
@@ -72,13 +77,24 @@ export default class GameBoard extends StatefulHTML {
   }
 
   canvasMouseUp(ev) {
-    this.dispatch({mouseDown: false});
+    this.dispatch({mouseDown: false, posFromThisClick: {}});
   }
 
   canvasMouseMove(ev) {
-    if (!this.getState().mouseDown) return;
+    const state = this.getState();
+    if (!state.mouseDown) return;
+
+    const {x, y} = mouseToGrid(state, ev, this.querySelector("canvas"));
+    if (state.posFromThisClick[toDrop({x, y, z: config.depth - 1})]) return;
+
+    const mode = this.getClickMode();
+    this.dispatch({type: mode, x, y, z: config.depth - 1});
+
   }
 
+  getClickMode() {
+    return document.getElementById("clickMode").value;
+  }
 
 }
 

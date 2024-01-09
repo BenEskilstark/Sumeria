@@ -1,5 +1,5 @@
 export const config = {
-  width: 10, height: 10, depth: 10,
+  width: 25, height: 25, depth: 10,
   turnTime: 200,
   topoColors: [
     "black", "black", "#52410D", "#6C5713", "#846C1C",

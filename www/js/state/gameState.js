@@ -1,9 +1,10 @@
 
 import {config} from '../config.js';
 import {initWater, addDrop} from './rain.js';
+import {initTopo} from './topo.js';
 
 export const initGameState = (players, clientID) => {
-  const game = {
+  return {
     /////////////
     // immutable game state
     players, // Array<ClientID>
@@ -21,25 +22,12 @@ export const initGameState = (players, clientID) => {
     myTurn: players.indexOf(clientID) == 0,
     actionQueue: [], // Array<Action>
 
+    posFromThisClick: {}, // Set<DropStr>
 
     /////////////
     // global game state that must be shared
-    topo: [
-      [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-      [9, 2, 1, 1, 1, 1, 1, 1, 1, 9],
-      [9, 3, 4, 1, 1, 1, 1, 2, 1, 9],
-      [9, 4, 5, 2, 1, 1, 8, 2, 1, 9],
-      [9, 5, 6, 3, 2, 1, 8, 2, 1, 9],
-      [9, 6, 7, 4, 3, 2, 8, 2, 1, 9],
-      [9, 7, 8, 8, 8, 3, 8, 2, 1, 9],
-      [9, 8, 9, 9, 9, 4, 8, 2, 2, 9],
-      [9, 9, 8, 8, 8, 8, 8, 8, 8, 9],
-      [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    ],
+    topo: initTopo(config.width, config.height, config.depth / 2),
     water: initWater(config.depth),
+    spouts: [], // Array<{x, y, z}>
   };
-
-  addDrop(game.water, 1, 7, 9);
-
-  return game;
 }
