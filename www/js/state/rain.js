@@ -19,7 +19,7 @@ export const initWater = (depth) => {
 }
 
 export const addDrop = (water, x, y, z) => {
-  water[z][toDrop({x, y, z})] = "O";
+  water[z][toDrop({x, y, z})] = {dir: "O", prev: toDrop({x, y, z})};
 };
 
 export const flowWater = (water, topo) => {
@@ -29,7 +29,7 @@ export const flowWater = (water, topo) => {
       const {x, y} = fromDrop(drop);
       // try to fall straight down
       if (z > 0 && topo[y][x] < z - 1 && !nextWater[z-1][toDrop({x,y,z:z-1})]) {
-        nextWater[z-1][toDrop({x,y,z:z-1})] = "o";
+        nextWater[z-1][toDrop({x,y,z:z-1})] = {dir: "o", prev: drop};
         continue;
       }
 
@@ -40,24 +40,22 @@ export const flowWater = (water, topo) => {
         {x: 0, y: 1, dir: "v"}, {x: 0, y: -1, dir: "^"},
         // {x: 0, y: 0, dir: "O"}, // staying put also ok
       ]
-      let surfaceTension = false;
       for (const d of dirs) {
         const pos = {x: x + d.x, y: y + d.y, z, dir: d.dir};
         const width = topo[0].length;
         const height = topo.length;
+
         if (pos.x < 0 || pos.y < 0 || pos.x >= width || pos.y >= height) {
-          // console.log("falling off the world");
           continue; // TODO: allow flowing off the end of the world
         }
+        if (water[z][drop].prev == toDrop({...pos})) {
+          continue; // don't go back to previous position
+        }
         if (topo[pos.y][pos.x] >= z) {
-          // console.log(pos, "blocked by topo");
           continue; // blocked by topo
         }
         if (nextWater[z][toDrop(pos)] || water[z][toDrop(pos)]) {
-          // console.log("blocked by water");
-          // surfaceTension = true;
-          continue;
-          // break; // blocked by water -- don't move at all
+          continue; // blocked by water
         }
 
         // else spot next to you is free, but try to fall down there too
@@ -70,14 +68,14 @@ export const flowWater = (water, topo) => {
           freePositions.push(pos);
         }
       }
-      if (freePositions.length > 0 && !surfaceTension) {
+      if (freePositions.length > 0) {
         const chosen = oneOf(freePositions);
-        nextWater[chosen.z][toDrop(chosen)] = chosen.dir;
+        nextWater[chosen.z][toDrop(chosen)] = {dir: chosen.dir, prev: drop};
         continue;
       }
 
       // else stay put
-      nextWater[z][drop] = "O";
+      nextWater[z][drop] = {dir: "O", prev: drop};
     }
   }
   return nextWater;
@@ -97,7 +95,7 @@ const toString = (water, topo) => {
   for (let z = 0; z < water.length; z++) {
     for (const drop in water[z]) {
       const {x, y} = fromDrop(drop);
-      grid[y][x] = water[z][drop];
+      grid[y][x] = water[z][drop].dir;
     }
   }
 

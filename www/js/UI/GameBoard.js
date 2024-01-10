@@ -30,7 +30,7 @@ export default class GameBoard extends StatefulHTML {
 
   render(state, canvas) {
     if (!canvas) return;
-    const {width, height, topo, water} = state;
+    const {width, height, topo, water, debug} = state;
 
     const ctx = canvas.getContext("2d");
     const sqWidth = canvas.width / width;
@@ -54,6 +54,15 @@ export default class GameBoard extends StatefulHTML {
       for (const drop in water[z]) {
         const {x, y} = fromDrop(drop);
         ctx.fillRect(x * sqWidth, y * sqHeight, sqWidth, sqHeight);
+        if (debug) {
+          ctx.font = "16px Arial"; // Adjust the size and font style as needed
+          ctx.fillStyle = "red";   // Set the color of the text to red
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          // Draw text
+          ctx.fillText(z, x * sqWidth + sqWidth / 2,  y * sqHeight + sqHeight / 2);
+          ctx.fillStyle = "steelblue";
+        }
       }
     }
 
@@ -66,6 +75,9 @@ export default class GameBoard extends StatefulHTML {
 
   canvasClick(ev) {
     const state = this.getState();
+    // don't do a click on the mouseup after a drag
+    if (Object.keys(state.posFromThisClick).length > 0) return;
+
     const {x, y} = mouseToGrid(state, ev, this.querySelector("canvas"));
 
     const mode = this.getClickMode();
@@ -77,7 +89,8 @@ export default class GameBoard extends StatefulHTML {
   }
 
   canvasMouseUp(ev) {
-    this.dispatch({mouseDown: false, posFromThisClick: {}});
+    // delay this so that it happens after the canvasClick event
+    setTimeout(() => this.dispatch({mouseDown: false, posFromThisClick: {}}), 0);
   }
 
   canvasMouseMove(ev) {

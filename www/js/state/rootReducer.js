@@ -8,11 +8,18 @@ export const rootReducer = (state, action) => {
 
   switch (action.type) {
     case 'END_TURN': {
-      for (const spout of state.spouts) {
-        const {x, y, z} = spout;
-        addDrop(state.water, x, y, z);
+      // traffic jams too likely if we do this every turn :/
+      if (state.turn % 2 == 0) {
+        for (const spout of state.spouts) {
+          const {x, y, z} = spout;
+          addDrop(state.water, x, y, z);
+        }
       }
-      return {...state, water: flowWater(state.water, state.topo)};
+      return {
+        ...state,
+        turn: state.turn + 1,
+        water: flowWater(state.water, state.topo),
+      };
     }
     case 'DIG': {
       dig(state.topo, action);

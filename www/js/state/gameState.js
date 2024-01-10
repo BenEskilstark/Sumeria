@@ -23,6 +23,7 @@ export const initGameState = (players, clientID) => {
     actionQueue: [], // Array<Action>
 
     posFromThisClick: {}, // Set<DropStr>
+    debug: true,
 
     /////////////
     // global game state that must be shared
