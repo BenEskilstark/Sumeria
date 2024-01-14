@@ -45,18 +45,10 @@ export const flowWater = (water, topo) => {
         const width = topo[0].length;
         const height = topo.length;
 
-        if (pos.x < 0 || pos.y < 0 || pos.x >= width || pos.y >= height) {
-          continue; // TODO: allow flowing off the end of the world
-        }
-        if (water[z][drop].prev == toDrop({...pos})) {
-          continue; // don't go back to previous position
-        }
-        if (topo[pos.y][pos.x] >= z) {
-          continue; // blocked by topo
-        }
-        if (nextWater[z][toDrop(pos)] || water[z][toDrop(pos)]) {
-          continue; // blocked by water
-        }
+        if (pos.x < 0 || pos.y < 0 || pos.x >= width || pos.y >= height) continue;
+        if (water[z][drop].prev == toDrop({...pos})) continue; // don't go back
+        if (topo[pos.y][pos.x] >= z) continue; // ground
+        if (nextWater[z][toDrop(pos)]) continue; // water
 
         // else spot next to you is free, but try to fall down there too
         if (
@@ -74,8 +66,13 @@ export const flowWater = (water, topo) => {
         continue;
       }
 
-      // else stay put
-      nextWater[z][drop] = {dir: "O", prev: drop};
+      // your current position may have become occupied, then go up
+      if (nextWater[z][drop] != null) {
+        // nextWater[z+1][drop] = {dir: "U", prev: toDrop({x: 0, y: 0, z: 0})}
+        // just go away for now
+      } else {
+        nextWater[z][drop] = {dir: "O", prev: drop};
+      }
     }
   }
   return nextWater;

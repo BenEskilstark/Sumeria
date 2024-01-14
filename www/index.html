@@ -8,7 +8,7 @@
     <div id="container" style="width: 100%; margin: auto">
       <stateful-client>
         <screen-router initial="LOBBY">
-          <game-lobby screen="LOBBY" display="block">
+          <game-lobby screen="LOBBY" class="Lobby" display="flex">
             <h2>Sumeria</h2>
             <div>
               <button onclick="this.closest('game-lobby').startGame()">
@@ -17,13 +17,14 @@
             </div>
           </game-lobby>
 
-          <game-board screen="GAME" display="flex">
-            <canvas class="boardCanvas" width=800 height=800
+          <game-board screen="GAME" display="block">
+            <canvas id="boardCanvas" class="boardCanvas" width=500 height=500
               onclick="this.closest('game-board').canvasClick(event)"
               onmousemove="this.closest('game-board').canvasMouseMove(event)"
               onmousedown="this.closest('game-board').canvasMouseDown(event)"
               onmouseup="this.closest('game-board').canvasMouseUp(event)"
             ></canvas>
+            <canvas id="sideCanvas" class="boardCanvas" width=500 height=200></canvas>
             <div>
               <select name="clickMode" id="clickMode">
                 <option value="DIG" selected="selected">Dig</option>
