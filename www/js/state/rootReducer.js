@@ -1,48 +1,20 @@
 import {config} from '../config.js';
 import {sessionReducer} from './sessionReducer.js';
-import {flowWater, addDrop, toDrop} from './rain.js';
-import {dig, pile} from './topo.js';
+import {queueReducer} from './queueReducer.js';
+import {turnReducer} from './turnReducer.js';
 
 export const rootReducer = (state, action) => {
   if (state === undefined) state = initState();
 
   switch (action.type) {
-    case 'END_TURN': {
-      // traffic jams too likely if we do this every turn :/
-      // if (state.turn % 2 == 0) {
-        for (const spout of state.spouts) {
-          const {x, y, z} = spout;
-          addDrop(state.water, x, y, z);
-        }
-      // }
-      return {
-        ...state,
-        turn: state.turn + 1,
-        water: flowWater(state.water, state.topo),
-      };
-    }
-    case 'DIG': {
-      dig(state.topo, action);
-      state.posFromThisClick[toDrop(action)] = true;
-      // console.log(state.posFromThisClick);
-      return {...state};
-    }
-    case 'PILE': {
-      pile(state.topo, action, state.depth - 1);
-      state.posFromThisClick[toDrop(action)] = true;
-      return {...state};
-    }
-    case 'DROP': {
-      const {x, z, y} = action;
-      addDrop(state.water, x, y, z);
-      state.posFromThisClick[toDrop(action)] = true;
-      return {...state};
-    }
-    case 'SPOUT': {
-      const {x, z, y} = action;
-      state.posFromThisClick[toDrop(action)] = true;
-      return {...state, spouts: [...state.spouts, {x, y, z}]};
-    }
+    // NOTE: any action that should be queued MUST be handled by this reducer:
+    // (actions that should be queued are any that should affect game state
+    // visible to all players)
+    case 'END_TURN':
+      return turnReducer(state, action);
+    case 'QUEUE_ACTION':
+    case 'CLEAR_ACTION_QUEUE':
+      return queueReducer(state, action);
     case 'LEAVE_SESSION':
     case 'START_SESSION':
       return sessionReducer(state, action);
@@ -57,9 +29,8 @@ export const initState = () => {
     sessions: {}, // sessionID -> {id: SessionID, clients: Array<ClientID>, started: Bool}
     sessionID: null, // session I am in
     numConnectedClients: 0,
-    clientID: 1,
-
-    realtime: true,
+    clientID: null,
+    realtime: config.isRealtime,
   };
 }
 

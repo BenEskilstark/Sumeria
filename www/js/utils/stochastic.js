@@ -35,4 +35,3 @@ export const weightedOneOf = (options, weights) => {
   return options[index];
 };
 
-

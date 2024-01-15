@@ -1,9 +1,9 @@
 import {rootReducer, initState} from './rootReducer.js';
 
 // sorta like react's useReducer hook but with convenient handling
-// for dispatching actions with no type. And giving sub/unsub functionality.
-// Returns as an array so that you can easily pattern match into your own names
-// if you want to use multiple independent reducers in your application.
+// for dispatching actions with no type. And giving sub/unsub functionality
+// returns as an array so that you can easily pattern match into your own names
+// if you want to use multiple independent reducers in your application
 // Though note that the canonical getState, dispatch, etc exported here is a singleton
 // meant for top-level application state.
 export const useReducer = (reducer, state) => {

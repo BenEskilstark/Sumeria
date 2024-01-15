@@ -10,8 +10,7 @@ export const sessionReducer = (state, action) => {
       return state;
     }
     case 'START_SESSION': { // your session is starting
-      const session = state.sessions[state.sessionID] || {clients: [state.clientID]};
-      console.log(session);
+      const session = state.sessions[state.sessionID];
       return {
         ...state,
         screen: 'GAME',

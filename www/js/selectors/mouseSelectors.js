@@ -1,11 +1,10 @@
 
 export const mouseToGrid = ({width, height}, ev, canvas) => {
   if (!canvas) return;
-  const sqWidth = canvas.getBoundingClientRect().width / width;
-  const sqHeight = canvas.getBoundingClientRect().height / height;
+  const sqSize = canvas.getBoundingClientRect().width / width;
 
   return {
-    x: Math.floor(ev.offsetX / sqWidth),
-    y: Math.floor(ev.offsetY / sqHeight),
+    x: Math.round(ev.offsetX / sqSize),
+    y: Math.round(ev.offsetY / sqSize),
   };
 }
