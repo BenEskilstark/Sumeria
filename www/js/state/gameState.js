@@ -1,6 +1,7 @@
 
 import {config} from '../config.js';
 import {newDuration} from '../selectors/durationSelectors.js';
+import {Topo} from '../state/topo.js';
 
 export const initGameState = (players, clientID) => {
   const game = {
@@ -8,8 +9,9 @@ export const initGameState = (players, clientID) => {
     // immutable game state
     players, // Array<ClientID>
 
-    width: config.boardSize,
-    height: config.boardSize,
+    width: config.width,
+    height: config.height,
+    isRealtime: config.isRealtime,
 
 
     /////////////
@@ -27,12 +29,16 @@ export const initGameState = (players, clientID) => {
     startTime: Date.now(),
     lastTurnEndTime: Date.now(), // the time when my last turn ended
 
+    posFromThisClick: {}, // SmartMap<Coord, bool>
+    debug: false,
+
 
     /////////////
     // global game state that must be shared
     nextEntityID: 0,
     entities: {}, // {[EntityID] => Object}
 
+    topo: new Topo(config.width, config.height),
   };
 
 

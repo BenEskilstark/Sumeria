@@ -17,7 +17,14 @@
               onmousemove="this.closest('game-board').canvasMouseMove(event)"
               onmousedown="this.closest('game-board').canvasMouseDown(event)"
               onmouseup="this.closest('game-board').canvasMouseUp(event)"
-            />
+              ></canvas>
+            <div>
+              <select name="clickMode" id="clickMode">
+                <option value="DIG" selected="selected">Dig</option>
+                <option value="PILE">Pile</option>
+                <option value="SPOUT">Water Spout</option>
+              </select>
+            </div>
           </game-board>
         </screen-router>
       </stateful-client>

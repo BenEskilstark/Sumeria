@@ -40,4 +40,5 @@ game-board {
 .boardCanvas {
   width: 90%;
   height: 90%;
+  border: 1px solid black;
 }
