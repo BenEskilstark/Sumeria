@@ -33,7 +33,8 @@ export default class GameBoard extends StatefulHTML {
   render(state, canvas) {
     if (!canvas) return;
     const {
-      width, height, myTurn, isRealtime, topo, debug
+      width, height, myTurn, isRealtime, debug,
+      topo, entities,
     } = state;
     if (!topo) return;
 
@@ -65,6 +66,18 @@ export default class GameBoard extends StatefulHTML {
       } else if (elevation == 0) {
         ctx.fillStyle = "#52410D";
         ctx.fillRect(x * sqWidth, y * sqHeight, sqWidth, sqHeight);
+      }
+    }
+
+    for (const entityID in entities) {
+      const entity = entities[entityID];
+      const {x, y} = entity;
+      if (x == null || y == null) return;
+      switch (entity.type) {
+        case 'FARM':
+          ctx.fillStyle = "yellow";
+          if (entity.hydrated) ctx.fillStyle = "green";
+          ctx.fillRect(x * sqWidth, y * sqHeight, sqWidth, sqHeight);
       }
     }
 

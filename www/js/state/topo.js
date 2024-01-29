@@ -11,6 +11,16 @@ export class Topo {
     this.reset();
   }
 
+  fromJSON({
+    width, height, topo, waterSources,
+  }) {
+    const toReturn = new Topo(width, height);
+    toReturn.topo = {...toReturn.topo, ...topo};
+    toReturn.waterSources = [...waterSources];
+    toReturn.computeWater();
+    return toReturn;
+  }
+
   union({x,y}, vals) {
     const square = smartGet(this.topo, {x,y});
     if (!square) return;
@@ -98,4 +108,12 @@ export class Topo {
   }
 
 
+  irrigate({entities}) {
+    for (const entityID in entities) {
+      const irrigable = entities[entityID];
+      if (!irrigable.isIrrigated) return;
+      irrigable.hydrated = this.getNeighbors(irrigable)
+        .some(c => smartGet(this.topo, c).water > 0);
+    }
+  }
 }

@@ -12,19 +12,27 @@
           <game-lobby screen="LOBBY" display="flex" ></game-lobby>
 
           <game-board screen="GAME" display="flex">
-            <canvas class="boardCanvas" width=800 height=800
+            <canvas class="boardCanvas" width=700 height=700
               onclick="this.closest('game-board').canvasClick(event)"
               onmousemove="this.closest('game-board').canvasMouseMove(event)"
               onmousedown="this.closest('game-board').canvasMouseDown(event)"
               onmouseup="this.closest('game-board').canvasMouseUp(event)"
               ></canvas>
-            <div>
-              <select name="clickMode" id="clickMode">
-                <option value="DIG" selected="selected">Dig</option>
-                <option value="PILE">Pile</option>
-                <option value="SPOUT">Water Spout</option>
-              </select>
-            </div>
+            <level-editor>
+              <div class="sidebarCard">
+                <h3>Simulation Parameters</h3>
+              </div>
+              <div class="sidebarCard">
+                <h3>Action on Click</h3>
+                <select name="clickMode" id="clickMode">
+                  <option value="DIG" selected="selected">Dig</option>
+                  <option value="PILE">Pile</option>
+                  <option value="SPOUT">Water Spout</option>
+                  <option value="FARM">Farm</option>
+                </select>
+              </div>
+              <import-export-level></import-export-level>
+            </level-editor>
           </game-board>
         </screen-router>
       </stateful-client>

@@ -18,6 +18,7 @@ export const turnReducer = (state, action) => {
 
       // update entities with a duration:
       for (const entityID in state.entities) {
+        const entity = state.entities[entityID];
         if (!entity.duration) continue;
         if (entity.duration.endTurn == state.turn) {
           // Do Stuff

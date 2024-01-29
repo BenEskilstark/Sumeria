@@ -1,8 +1,19 @@
-  - import/export levels
+  - bugs:
+    - topo water computation is really slow at ~100
+    - overlapping water sources interfere with each other's numbers
+      (permanently)
+  - level editor
+    - separate mode that can be entered/exited
+    - parameters:
+      - width/height, resources
     - basic level
-  - place farms
-    - green if next to water, else yellow
+  - forests
+    - click to place
+    - grow every X turns
+      - if next to other forest and unoccupied
+  - json-card which can show info on hover
   - resources
     - clay
     - food
     - population
+    - wood
