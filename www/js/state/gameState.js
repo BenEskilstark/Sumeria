@@ -30,7 +30,7 @@ export const initGameState = (players, clientID) => {
     lastTurnEndTime: Date.now(), // the time when my last turn ended
 
     posFromThisClick: {}, // SmartMap<Coord, bool>
-    debug: false,
+    debug: true,
 
 
     /////////////

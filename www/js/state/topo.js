@@ -38,6 +38,10 @@ export class Topo {
     this.computeWater();
   }
 
+  getWaterSource({x, y}) {
+    return this.waterSources.find(w => w.x == x && w.y == y);
+  }
+
   dig({x,y}) {
     const square = smartGet(this.topo, {x,y});
     if (square?.elevation > 0) {

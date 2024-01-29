@@ -1,0 +1,8 @@
+  - import/export levels
+    - basic level
+  - place farms
+    - green if next to water, else yellow
+  - resources
+    - clay
+    - food
+    - population

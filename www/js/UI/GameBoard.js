@@ -51,11 +51,16 @@ export default class GameBoard extends StatefulHTML {
         ctx.fillStyle = "steelblue";
         ctx.fillRect(x * sqWidth, y * sqHeight, sqWidth, sqHeight);
         if (debug) {
+          const waterSource = topo.getWaterSource({x, y});
+          if (!waterSource) continue;
           ctx.font = "14px Arial";
           ctx.fillStyle = "red";
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
-          ctx.fillText(water, x * sqWidth + sqWidth / 2,  y * sqHeight + sqHeight / 2);
+          ctx.fillText(water,
+            waterSource.x * sqWidth + sqWidth / 2,
+            waterSource.y * sqHeight + sqHeight / 2,
+          );
         }
       } else if (elevation == 0) {
         ctx.fillStyle = "#52410D";
