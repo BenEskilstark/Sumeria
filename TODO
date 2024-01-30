@@ -2,11 +2,11 @@
     - topo water computation is really slow at ~100
     - overlapping water sources interfere with each other's numbers
       (permanently)
+    - don't spread water through 0.5 elev tiles
   - level editor
     - separate mode that can be entered/exited
-    - parameters:
-      - width/height, resources
-    - basic level
+  - entities:
+    - can't place on elevation = 0
   - forests
     - click to place
     - grow every X turns
@@ -17,3 +17,4 @@
     - food
     - population
     - wood
+

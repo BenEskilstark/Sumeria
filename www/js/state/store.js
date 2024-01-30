@@ -1,4 +1,4 @@
-import {rootReducer, initState} from './rootReducer.js';
+import {rootReducer, initState} from '../reducers/rootReducer.js';
 
 // sorta like react's useReducer hook but with convenient handling
 // for dispatching actions with no type. And giving sub/unsub functionality

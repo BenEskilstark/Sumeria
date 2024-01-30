@@ -1,5 +1,5 @@
 import {useReducer} from '../state/store.js';
-import {rootReducer, initState} from '../state/rootReducer.js';
+import {rootReducer, initState} from '../reducers/rootReducer.js';
 import {setupSocket, dispatchToServer} from '../sockets.js';
 
 export default class StatefulClient extends HTMLElement {

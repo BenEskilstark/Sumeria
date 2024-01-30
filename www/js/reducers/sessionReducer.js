@@ -1,4 +1,4 @@
-import {initGameState} from '../state/gameState.js';
+import {initGameState} from '../state/state.js';
 
 export const sessionReducer = (state, action) => {
   switch (action.type) {

@@ -12,11 +12,11 @@ export class Topo {
   }
 
   fromJSON({
-    width, height, topo, waterSources,
+    width, height, topo,
   }) {
     const toReturn = new Topo(width, height);
-    toReturn.topo = {...toReturn.topo, ...topo};
-    toReturn.waterSources = [...waterSources];
+    toReturn.topo = {...toReturn.topo, ...topo.topo};
+    toReturn.waterSources = [...topo.waterSources];
     toReturn.computeWater();
     return toReturn;
   }
@@ -52,12 +52,14 @@ export class Topo {
     return this.waterSources.find(w => w.x == x && w.y == y);
   }
 
-  dig({x,y}) {
+  dig(params) {
+    let {x, y, elevation} = params;
+    elevation = elevation ?? 0;
     const square = smartGet(this.topo, {x,y});
     if (square?.elevation > 0) {
       smartSet(
         this.topo, {x, y},
-        {...square, elevation: square.elevation - 1},
+        {...square, elevation},
       );
       this.computeWater();
     }

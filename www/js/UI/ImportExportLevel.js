@@ -2,6 +2,10 @@ import StatefulHTML from './StatefulHTML.js';
 import {oneOf, randomIn, normalIn, weightedOneOf} from '../utils/stochastic.js';
 import {config} from '../config.js';
 import {smartGet, smartSet} from '../utils/arraysAndObjects.js';
+import {
+  initMultiplayerState,
+  serializeState,
+} from '../state/state.js';
 
 /**
  * Use like:
@@ -34,11 +38,7 @@ export default class ImportExportLevel extends StatefulHTML {
   exportLevel() {
     const state = this.getState();
     const textfield = document.getElementById("importExport");
-    textfield.value = JSON.stringify({
-      ...state.nextEntityID,
-      ...state.entities,
-      ...state.topo,
-    });
+    textfield.value = serializeState(state);
   }
 
   importLevel() {
