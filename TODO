@@ -1,20 +1,27 @@
+
+
   - bugs:
-    - topo water computation is really slow at ~100
     - overlapping water sources interfere with each other's numbers
-      (permanently)
     - don't spread water through 0.5 elev tiles
+
   - level editor
     - separate mode that can be entered/exited
-  - entities:
-    - can't place on elevation = 0
-  - forests
-    - click to place
-    - grow every X turns
-      - if next to other forest and unoccupied
-  - json-card which can show info on hover
+
+  - UI
+    - json-card which can show info on hover
+
   - resources
     - clay
+      - acquired after digging, spent when piling
+        - also spent on huts
     - food
+      - acquired when farms are irrigated in your influence at EoT
+      - stored in granaries (and huts?)
+        - add isFoodStore property
     - population
+      - max is based off housing from huts
+        - add isHouse property
+      - needed to perform tasks -- how?
     - wood
+      - need action for cutting down trees
 

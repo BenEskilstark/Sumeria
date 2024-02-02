@@ -18,6 +18,11 @@ export const rootReducer = (state, action) => {
     case 'PILE':
     case 'SPOUT':
     case 'FARM':
+    case 'FOREST':
+    case 'MOUNTAIN':
+    case 'HUT':
+    case 'GRANARY':
+    case 'MONUMENT':
     case 'SET_GAME_STATE':
       state = gameReducer(state, action);
       // fallthrough (?)

@@ -18,12 +18,15 @@ export const initGameState = (players, clientID) => {
   const game = {
     /////////////
     // global game state that must be shared
-    ...initMultiplayerState(),
+    ...initMultiplayerState(players),
 
 
     /////////////
     // local game state
     mouseDown: false,
+    clickMode: "DIG", // | "PILE" | "SPOUT" | "FARM"
+
+    waterSpoutQuantity: config.waterSpoutQuantity,
 
     myTurn: players.indexOf(clientID) == 0, // TODO == turnIndex
     actionQueue: [], // Array<Action>
@@ -52,6 +55,8 @@ export const initMultiplayerState = (players) => {
     turn: 0,
     turnIndex: 0, // index of player whose turn it is
 
+    season: "NORMAL", // | "DRY" | "WET"
+    nextSeason: "NORMAL",
     nextEntityID: 0,
     entities: {}, // {[EntityID] => Object}
     topo: new Topo(config.width, config.height),

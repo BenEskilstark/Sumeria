@@ -7,6 +7,7 @@ export default class StatefulClient extends HTMLElement {
     super();
     const [getState, dispatch, subscribe, unsubscribe] = useReducer(rootReducer, initState());
     window.getState = getState;
+    window.dispatch = dispatch;
     // subscribe(console.log);
     this.getState = getState;
     this.dispatch = dispatch;
