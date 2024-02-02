@@ -14,21 +14,16 @@
           <game-board screen="GAME" display="flex">
             <canvas class="boardCanvas" width=700 height=700
               onclick="this.closest('game-board').canvasClick(event)"
-              onmousemove="this.closest('game-board').canvasMouseMove(event)"
+              onmousemove="this.closest('game-board')?.canvasMouseMove(event)"
               onmousedown="this.closest('game-board').canvasMouseDown(event)"
               onmouseup="this.closest('game-board').canvasMouseUp(event)"
-              ></canvas>
+            ></canvas>
+            <game-controls>
+              <turn-controls></turn-controls>
+            <game-controls>
             <level-editor>
               <level-parameters></level-parameters>
-              <div class="sidebarCard">
-                <h3>Action on Click</h3>
-                <select name="clickMode" id="clickMode">
-                  <option value="DIG" selected="selected">Dig</option>
-                  <option value="PILE">Pile</option>
-                  <option value="SPOUT">Water Spout</option>
-                  <option value="FARM">Farm</option>
-                </select>
-              </div>
+              <click-action></click-action>
               <import-export-level></import-export-level>
             </level-editor>
           </game-board>

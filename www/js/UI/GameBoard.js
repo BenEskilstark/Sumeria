@@ -45,8 +45,77 @@ export default class GameBoard extends StatefulHTML {
     ctx.fillStyle="tan";
     ctx.fillRect(0,0,canvas.width,canvas.height);
 
+    for (const entityID in entities) {
+      const entity = entities[entityID];
+      const {x, y} = entity;
+      if (x == null || y == null) return;
+      switch (entity.type) {
+        case 'FARM':
+          ctx.fillStyle = "gold";
+          if (entity.hydrated) ctx.fillStyle = "green";
+          ctx.fillRect(x * sqWidth, y * sqHeight, sqWidth, sqHeight);
+          break;
+        case 'FOREST':
+          ctx.fillStyle = "green";
+          ctx.beginPath();
+          ctx.moveTo(x * sqWidth + sqWidth / 2, y * sqHeight + 2);
+          ctx.lineTo(x * sqWidth + sqWidth - 2, y * sqHeight + sqHeight - 2);
+          ctx.lineTo(x * sqWidth + 2, y * sqHeight + sqHeight - 2);
+          ctx.closePath();
+          ctx.fill();
+          break;
+        case 'MOUNTAIN':
+          ctx.fillStyle = "gray";
+          ctx.beginPath();
+          ctx.moveTo(x * sqWidth + sqWidth / 2, y * sqHeight + 2);
+          ctx.lineTo(x * sqWidth + sqWidth - 2, y * sqHeight + sqHeight - 2);
+          ctx.lineTo(x * sqWidth + 2, y * sqHeight + sqHeight - 2);
+          ctx.closePath();
+          ctx.fill();
+          break;
+        case 'HUT':
+          ctx.fillStyle = "brown";
+          ctx.beginPath();
+          ctx.arc(
+            x * sqWidth + sqWidth / 2, y * sqHeight + sqHeight / 2,
+            sqWidth / 2 - 2, 0, 2 * Math.PI,
+          );
+          ctx.closePath();
+          ctx.fill();
+          break;
+        case 'GRANARY':
+          ctx.strokeStyle = "black";
+          ctx.strokeRect(
+            x * sqWidth + sqWidth / 4, y * sqHeight,
+            sqWidth / 2, sqHeight,
+          );
+          ctx.fillStyle = "brown";
+          ctx.fillRect(
+            x * sqWidth + sqWidth / 4, y * sqHeight,
+            sqWidth / 2, sqHeight,
+          );
+          ctx.fillStyle = "green";
+          ctx.fillRect(
+            x * sqWidth + sqWidth / 4, y * sqHeight + sqHeight,
+            sqWidth / 2, -1 * sqHeight * (entity.occupied / entity.capacity),
+          );
+          break;
+        case 'MONUMENT':
+          ctx.fillStyle = "yellow";
+          ctx.beginPath();
+          ctx.moveTo(x * sqWidth + sqWidth / 2, y * sqHeight + 2);
+          ctx.lineTo(x * sqWidth + sqWidth - 2, y * sqHeight + sqHeight - 2);
+          ctx.lineTo(x * sqWidth + 2, y * sqHeight + sqHeight - 2);
+          ctx.closePath();
+          ctx.fill();
+          break;
+
+      }
+    }
+
+
     for (const key in topo.topo) {
-      const {elevation, water} = smartGet(topo.topo, key);
+      const {elevation, water, influence} = smartGet(topo.topo, key);
       const {x, y} = fromKey(key);
       if (water > 0) {
         ctx.fillStyle = "steelblue";
@@ -66,18 +135,9 @@ export default class GameBoard extends StatefulHTML {
       } else if (elevation == 0) {
         ctx.fillStyle = "#52410D";
         ctx.fillRect(x * sqWidth, y * sqHeight, sqWidth, sqHeight);
-      }
-    }
-
-    for (const entityID in entities) {
-      const entity = entities[entityID];
-      const {x, y} = entity;
-      if (x == null || y == null) return;
-      switch (entity.type) {
-        case 'FARM':
-          ctx.fillStyle = "yellow";
-          if (entity.hydrated) ctx.fillStyle = "green";
-          ctx.fillRect(x * sqWidth, y * sqHeight, sqWidth, sqHeight);
+      } else if (influence > 0) {
+        ctx.strokeStyle = "red";
+        ctx.strokeRect(x * sqWidth, y * sqHeight, sqWidth, sqHeight);
       }
     }
 
@@ -103,9 +163,9 @@ export default class GameBoard extends StatefulHTML {
     const mode = this.getClickMode();
     this.dispatch({type: mode, x, y});
 
-    if (!state.isRealtime) {
-      this.dispatchToServerAndSelf({type: 'END_TURN', clientID});
-    } // else turn end is handled already
+    // if (!state.isRealtime) {
+    //   this.dispatchToServerAndSelf({type: 'END_TURN', clientID});
+    // } // else turn end is handled already
   }
 
   canvasMouseDown(ev) {
@@ -130,7 +190,8 @@ export default class GameBoard extends StatefulHTML {
   }
 
   getClickMode() {
-    return document.getElementById("clickMode").value;
+    // return document.getElementById("clickMode").value;
+    return this.getState().clickMode;
   }
 
 }
