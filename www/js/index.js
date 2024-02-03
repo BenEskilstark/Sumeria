@@ -17,6 +17,9 @@ customElements.define('ai-player', AIPlayer);
 import TurnControls from './UI/TurnControls.js';
 customElements.define('turn-controls', TurnControls);
 
+import PlayerResources from './UI/PlayerResources.js';
+customElements.define('player-resources', PlayerResources);
+
 import ImportExportLevel from './UI/ImportExportLevel.js';
 customElements.define('import-export-level', ImportExportLevel);
 

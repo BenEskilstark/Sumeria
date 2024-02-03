@@ -1,10 +1,10 @@
 
 
   - bugs:
-    - first turn season says next: normal but it's not always
     - overlapping water sources interfere with each other's numbers
     - consume water in farms
     - don't spread influence through forests, mtns, etc
+    - water still spreads too slowly
 
   - ideas:
     - floods
@@ -23,13 +23,20 @@
 
   - UI
     - json-card which can show info on hover
+      - in UI/PlayerResources.js
+    - tag for displaying indicator values tracking delta since last turn
 
   - resources
+    - buildings have cost attached to their entity
+    - selector which takes in a building and your resources and
+      says whether you can afford it
+      - mutator that takes in same params but actually spends them
     - clay
       - acquired after digging, spent when piling
         - also spent on huts
     - food
       - acquired when farms are irrigated in your influence at EoT
+        - and require population to farm them
       - stored in granaries (and huts?)
         - add isFoodStore property
     - population

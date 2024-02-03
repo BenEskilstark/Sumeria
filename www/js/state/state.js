@@ -45,34 +45,48 @@ export const initGameState = (players, clientID, level) => {
 }
 
 export const initMultiplayerState = (players, clientID, level) => {
-  console.log(level);
+  players = players ?? []; // Array<ClientID>
+  clientID = clientID ?? -1;
+  let multState = null;
   if (level != null) {
     // NOTE: also done in reducers/gameReducer
     level.topo = new Topo(level.width, level.height).fromJSON(level);
-    level.players = players;
+    level.players = players; // Array<ClientID>
     level.clientID = clientID;
-    return level;
+    if (!level.playerResources) level.playerResources = {};
+    multState = level;
+  } else {
+    multState = {
+      width: config.width,
+      height: config.height,
+
+      isRealtime: config.isRealtime,
+      players,
+      clientID,
+
+      turn: 0,
+      turnIndex: 0, // index of player whose turn it is
+
+      season: "NORMAL", // | "DRY" | "WET"
+      nextSeason: "NORMAL",
+      nextEntityID: 0,
+      entities: {}, // {[EntityID] => Object}
+      topo: new Topo(config.width, config.height),
+      playerResources: {},
+    };
   }
-  players = players ?? []; // Array<ClientID>
-  clientID = clientID ?? -1;
 
-  return {
-    width: config.width,
-    height: config.height,
-
-    isRealtime: config.isRealtime,
-    players,
-    clientID,
-
-    turn: 0,
-    turnIndex: 0, // index of player whose turn it is
-
-    season: "NORMAL", // | "DRY" | "WET"
-    nextSeason: "NORMAL",
-    nextEntityID: 0,
-    entities: {}, // {[EntityID] => Object}
-    topo: new Topo(config.width, config.height),
+  for (const id of players) {
+    multState.playerResources[id] = {
+      population: 0,
+      clay: 6,
+      food: 12,
+      wood: 0,
+      stone: 0,
+    };
   }
+
+  return multState;
 }
 
 export const serializeState = (state) => {

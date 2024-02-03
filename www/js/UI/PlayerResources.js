@@ -1,0 +1,33 @@
+import StatefulHTML from './StatefulHTML.js';
+import {
+  initMultiplayerState,
+  serializeState,
+} from '../state/state.js';
+
+const baseHtml = (state) => {
+  if (!state.playerResources) return "";
+  const resources = state.playerResources[state.clientID];
+  let keyVals = "";
+  for (const key in resources) {
+    keyVals += `<div><b>${key}</b>: ${resources[key]}</div>`;
+  }
+  return `
+    <div class="sidebarCard">
+      <h3>Resources</h3>
+      ${keyVals}
+    </div>
+  `;
+}
+
+export default class PlayerResources extends StatefulHTML {
+  connectedCallback() {
+    const state = this.getState();
+    this.innerHTML = baseHtml(state);
+  }
+
+  onChange(state) {
+    this.innerHTML = baseHtml(state);
+  }
+}
+
+

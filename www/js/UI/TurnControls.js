@@ -13,8 +13,6 @@ const baseHtml = (state) => {
       >End Turn</button>
       <div>
         Season: ${state.season}
-      </div>
-      <div>
         Next: ${state.nextSeason}
       </div>
     </div>
