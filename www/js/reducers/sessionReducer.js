@@ -14,7 +14,7 @@ export const sessionReducer = (state, action) => {
       return {
         ...state,
         screen: 'GAME',
-        ...initGameState(session.clients, state.clientID),
+        ...initGameState(session.clients, state.clientID, action.level),
       };
     }
   }

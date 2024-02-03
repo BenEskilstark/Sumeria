@@ -52,7 +52,7 @@ io.on("connection", (socket) => {
       case 'JOIN_SESSION':
         return joinSession(state, clientID, action.sessionID);
       case 'START_SESSION':
-        return startSession(state, clientID, action.sessionID);
+        return startSession(state, clientID, action);
       case 'LEAVE_SESSION':
         return leaveSession(state, clientID, action.sessionID);
     }

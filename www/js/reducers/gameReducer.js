@@ -17,13 +17,15 @@ export const gameReducer = (state, action) => {
 
   switch (action.type) {
     case 'SET_GAME_STATE':
-      return {
+      // TODO: this should probably call initMultiplayerState
+      state = {
         ...state,
         ...action.level,
         topo: state.topo.fromJSON(action.level),
         players: state.players, // HACK
         clientID: state.clientID, // HACK
       };
+      return state;
     case 'DIG': {
       if (getEntitiesAtPos(state, action).length > 0) return state;
 

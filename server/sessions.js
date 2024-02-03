@@ -98,15 +98,16 @@ const leaveSession = (state, clientID, sessionID) => {
 };
 
 
-const startSession = (state, clientID, sessionID) => {
+const startSession = (state, clientID, action) => {
   const {sessions} = state;
+  const {sessionID, level} = action;
   sessions[sessionID].started = true;
 
   // inform all clients
   emit(state, {sessions}, clientID, false /* all */, true /* self */);
 
   // inform all in session specifically:
-  emit(state, {type: 'START_SESSION'}, clientID, true, true);
+  emit(state, {type: 'START_SESSION', level}, clientID, true, true);
 };
 //////////////////////////////////////////////////////////////////////////
 

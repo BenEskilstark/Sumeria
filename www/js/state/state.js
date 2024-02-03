@@ -14,11 +14,11 @@ export const initState = () => {
   };
 }
 
-export const initGameState = (players, clientID) => {
+export const initGameState = (players, clientID, level) => {
   const game = {
     /////////////
     // global game state that must be shared
-    ...initMultiplayerState(players, clientID),
+    ...initMultiplayerState(players, clientID, level),
 
 
     /////////////
@@ -44,7 +44,15 @@ export const initGameState = (players, clientID) => {
   return game;
 }
 
-export const initMultiplayerState = (players, clientID) => {
+export const initMultiplayerState = (players, clientID, level) => {
+  console.log(level);
+  if (level != null) {
+    // NOTE: also done in reducers/gameReducer
+    level.topo = new Topo(level.width, level.height).fromJSON(level);
+    level.players = players;
+    level.clientID = clientID;
+    return level;
+  }
   players = players ?? []; // Array<ClientID>
   clientID = clientID ?? -1;
 

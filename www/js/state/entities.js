@@ -1,4 +1,5 @@
 import {config} from '../config.js';
+import {oneOf, weightedOneOf} from '../utils/stochastic.js';
 
 export const makeFarm = ({x, y}) => {
   return {
@@ -14,7 +15,7 @@ export const makeForest = ({x, y}) => {
   return {
     type: 'FOREST',
     x, y,
-    turnsToGrowth: config.forestGrowthTurns,
+    turnsToGrowth: oneOf(config.forestGrowthTurns),
   };
 }
 

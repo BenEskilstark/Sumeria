@@ -74,12 +74,12 @@ const growForests = (state) => {
           smartGet(state.topo.topo, pos)?.elevation == 1 &&
           getEntitiesAtPos(state, pos).length == 0
         ) {
-          state = entityReducer(state, {
+          entityReducer(state, {
             type: 'ADD_ENTITY', entity: makeForest(pos),
           });
         }
       }
-      forest.turnsToGrowth = config.forestGrowthTurns;
+      forest.turnsToGrowth = oneOf(config.forestGrowthTurns);
     }
   }
   return state;

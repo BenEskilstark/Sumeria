@@ -1,6 +1,7 @@
 import StatefulHTML from './StatefulHTML.js';
 import {config} from '../config.js';
 import {dropdown} from '../UI/components/Dropdown.js';
+import {levels} from '../levels/levels.js';
 
 const baseLobby = () => {
   return `
@@ -17,13 +18,14 @@ const baseLobby = () => {
 }
 
 const listedGame = (state, sessionID) => {
+  const d = document.getElementById;
   const {sessions} = state;
   const session = sessions[sessionID];
   const joinAction = JSON.stringify({type: 'JOIN_SESSION', sessionID})
     .replaceAll('"', "'");
-  const startAction = JSON.stringify({type: 'START_SESSION', sessionID})
-    .replaceAll('"', "'");
+
   const amHost = state.sessionID == sessionID && session.clients[0] == state.clientID;
+
   return `
     <div class="gameInLobby">
       ${session.name} Players: ${session.clients.length} / 10
@@ -34,18 +36,19 @@ const listedGame = (state, sessionID) => {
       >
         Join Game
       </button>
-      <button
-        style="display: ${amHost ? 'inline' : 'none'}"
-        onclick="this.closest('game-lobby').dispatchToServer(${startAction})"
-      >
-        Start Game
-      </button>
-      <button
-        style="display: ${amHost ? 'inline' : 'none'}"
-        onclick="this.closest('game-lobby').addAIPlayer()"
-      >
-        Add AI Player
-      </button>
+      <span style="display: ${amHost ? 'inline' : 'none'}">
+        <button
+          onclick="this.closest('game-lobby').startGame(${sessionID})"
+        >
+          Start Game
+        </button>
+        <button
+          onclick="this.closest('game-lobby').addAIPlayer()"
+        >
+          Add AI Player
+        </button>
+        ${dropdown({options: Object.keys(levels), id: 'lvlD'})}
+      </span>
     </div>
   `;
 }
@@ -88,6 +91,15 @@ export default class Lobby extends StatefulHTML {
       aiClient({apm: config.apm, sessionID}),
     );
 
+  }
+
+  startGame(sessionID) {
+    const levelName = document.getElementById("lvlD").value;
+
+    this.dispatchToServer({
+      type: 'START_SESSION', sessionID,
+      level: levels[levelName],
+    });
   }
 
 }

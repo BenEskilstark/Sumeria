@@ -4,14 +4,9 @@ export const entityReducer = (state, action) => {
   switch (action.type) {
     case 'ADD_ENTITY': {
       const {entity} = action;
-      return {
-        ...state,
-        nextEntityID: state.nextEntityID + 1,
-        entities: {
-          ...state.entities,
-          [state.nextEntityID]: entity,
-        },
-      };
+      state.nextEntityID += 1;
+      state.entities[state.nextEntityID] = entity;
+      return state;
     }
     case 'REMOVE_ENTITY': {
 

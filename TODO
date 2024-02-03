@@ -1,9 +1,22 @@
 
 
   - bugs:
-    - forest growth is broken
+    - first turn season says next: normal but it's not always
     - overlapping water sources interfere with each other's numbers
-    - don't spread water through 0.5 elev tiles
+    - consume water in farms
+    - don't spread influence through forests, mtns, etc
+
+  - ideas:
+    - floods
+    - easter island
+      - all multiples of 6 if we stay sumerian
+      - different scenarios (also the nile)
+    - digging produces 10 clay
+      - and requires population
+    - 5x pop per hut --> 20 food stored
+    - farms produce 2 food
+      - system for prioritizing how population is allocated
+    - tablets which are sets of actions
 
   - level editor
     - separate mode that can be entered/exited
