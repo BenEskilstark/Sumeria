@@ -2,7 +2,7 @@ export const config = {
   isRealtime: false,
   turnTime: 0, // ms
 
-  width: 30, height: 30,
+  width: 35, height: 35,
 
   seasons: ['NORMAL', 'DRY', 'WET'],
   seasonProbabilities: { // arrays ordered normal, dry, wet too
@@ -12,7 +12,7 @@ export const config = {
   },
   seasonMultipliers: {
     'NORMAL': 1,
-    'DRY': 0.5,
+    'DRY': 0.25,
     'WET': 1.5,
   },
 

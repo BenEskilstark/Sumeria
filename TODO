@@ -1,6 +1,7 @@
 
 
   - bugs:
+    - forest growth is broken
     - overlapping water sources interfere with each other's numbers
     - don't spread water through 0.5 elev tiles
 

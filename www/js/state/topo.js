@@ -141,8 +141,12 @@ export class Topo {
   computeWater() {
     this.clearWater();
     const visited = {};
-    const sources = this.waterSources
-      .map(s => ({...s, water: s.water * this.waterSourceMultiplier}));
+    const sources = this.waterSources.map(s => {
+      return {
+        ...s,
+        water: Math.floor(s.water * this.waterSourceMultiplier),
+      };
+    });
     const queue = sources.map((s,i) => {
       return {x: s.x, y: s.y, source: i};
     });

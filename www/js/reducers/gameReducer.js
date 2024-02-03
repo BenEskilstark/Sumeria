@@ -22,6 +22,7 @@ export const gameReducer = (state, action) => {
         ...action.level,
         topo: state.topo.fromJSON(action.level),
         players: state.players, // HACK
+        clientID: state.clientID, // HACK
       };
     case 'DIG': {
       if (getEntitiesAtPos(state, action).length > 0) return state;

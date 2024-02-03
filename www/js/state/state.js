@@ -18,7 +18,7 @@ export const initGameState = (players, clientID) => {
   const game = {
     /////////////
     // global game state that must be shared
-    ...initMultiplayerState(players),
+    ...initMultiplayerState(players, clientID),
 
 
     /////////////
@@ -44,13 +44,17 @@ export const initGameState = (players, clientID) => {
   return game;
 }
 
-export const initMultiplayerState = (players) => {
+export const initMultiplayerState = (players, clientID) => {
+  players = players ?? []; // Array<ClientID>
+  clientID = clientID ?? -1;
+
   return {
     width: config.width,
     height: config.height,
 
     isRealtime: config.isRealtime,
-    players: players ?? [], // Array<ClientID>
+    players,
+    clientID,
 
     turn: 0,
     turnIndex: 0, // index of player whose turn it is
