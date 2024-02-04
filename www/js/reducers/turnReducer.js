@@ -1,8 +1,11 @@
 
 import {msToTurns, newDuration} from '../selectors/durationSelectors.js';
 import {config} from '../config.js';
-import {getEntitiesAtPos} from '../selectors/entitySelectors.js';
+import {
+  getEntitiesAtPos, getEntitiesByType, getNeighborEntities,
+} from '../selectors/entitySelectors.js';
 import {entityReducer} from './entityReducer.js';
+import {spendResources, gainResources} from './resourceReducer.js';
 import {
   makeFarm, makeForest,
 } from '../state/entities.js';
@@ -10,6 +13,7 @@ import {oneOf, weightedOneOf} from '../utils/stochastic.js';
 import {
   smartGet, smartSet, fromKey, toKey,
 } from '../utils/arraysAndObjects.js';
+import {canAfford} from '../selectors/resourceSelectors.js';
 
 //////////////
 // NOTE: any action that should be queued MUST be handled by this reducer:
@@ -30,6 +34,7 @@ export const turnReducer = (state, action) => {
       // updateDurations(state);
       growForests(state);
       updateSeasons(state);
+      updateResources(state);
 
 
       // compute water again
@@ -91,6 +96,104 @@ const updateSeasons = (state) => {
   state.topo.waterSourceMultiplier = config.seasonMultipliers[state.season];
   const probs = config.seasonProbabilities[state.season];
   state.nextSeason = weightedOneOf(config.seasons, probs);
+}
+
+
+const updateResources = (state) => {
+  for (const clientID of state.players) {
+    const resources = state.playerResources[clientID];
+    let cost = {};
+
+    // assign labor to food and produce it
+    let mannableFarms = getEntitiesByType(state, 'FARM')
+      .filter(e => state.topo.withinInfluence(e))
+      .filter(farm => farm.hydrated);
+    let labor = Math.min(mannableFarms.length, resources.labor);
+    if (labor > 0) {
+      spendResources(state, {cost: {labor}}, clientID);
+      let benefit = {...mannableFarms[0].mannedBenefit};
+      for (const key in benefit) {
+        benefit[key] *= labor;
+      }
+      gainResources(state, {benefit}, clientID);
+    }
+
+    // assign labor to lumber and produce it
+    let mannableLumberMills = getEntitiesByType(state, 'LUMBER_MILL')
+      .filter(e => state.topo.withinInfluence(e))
+      .filter(m => getNeighborEntities(state, m).some(e => e.type == "FOREST"));
+    labor = Math.min(mannableLumberMills.length, resources.labor);
+    if (labor > 0) {
+      // get resources out of the forest:
+      let treesChopped = 0;
+      for (let i = 0; i < mannableLumberMills.length; i++) {
+        if (i > labor) break;
+        const mill = mannableLumberMills[i];
+        const forest = getNeighborEntities(state, mill).find(e => e.type == "FOREST");
+        if (!forest) continue;
+        forest.resources.wood -= mill.mannedBenefit.wood;
+        if (forest.resources.wood <= 0) {
+          entityReducer(state, {type: 'REMOVE_ENTITY', entityID: forest.id});
+        }
+        treesChopped++;
+      }
+      labor = treesChopped;
+
+      // then update your resources
+      spendResources(state, {cost: {labor}}, clientID);
+      let benefit = {...mannableLumberMills[0].mannedBenefit};
+      for (const key in benefit) {
+        benefit[key] *= labor;
+      }
+      gainResources(state, {benefit}, clientID);
+    }
+
+    let mannableMines = getEntitiesByType(state, 'MINE')
+      .filter(e => state.topo.withinInfluence(e))
+      .filter(m => getNeighborEntities(state, m).some(e => e.type == "MOUNTAIN"));
+    labor = Math.min(mannableMines.length, resources.labor);
+    if (labor > 0) {
+      // get resources out of the mine:
+      let mtnsMined = 0;
+      for (let i = 0; i < mannableMines.length; i++) {
+        if (i > labor) break;
+        const mine = mannableMines[i];
+        const mountain = getNeighborEntities(state, mine)
+          .find(e => e.type == "MOUNTAIN");
+        if (!mountain) continue;
+        mountain.resources.stone -= mine.mannedBenefit.stone;
+        if (mountain.resources.stone <= 0) {
+          entityReducer(state, {type: 'REMOVE_ENTITY', entityID: mountain.id});
+        }
+        mtnsMined++;
+      }
+      labor = mtnsMined;
+
+      // then update your resources
+      spendResources(state, {cost: {labor}}, clientID);
+      let benefit = {...mannableMines[0].mannedBenefit};
+      for (const key in benefit) {
+        benefit[key] *= labor;
+      }
+      gainResources(state, {benefit}, clientID);
+    }
+
+    // assign labor to mines and produce it
+
+    // feed population
+    cost = {food: resources.population};
+    if (!canAfford(state, {cost})) {
+      cost.population = resources.population - resources.food;
+      cost.food = resources.food;
+    }
+    spendResources(state, {cost}, clientID);
+
+    // turn population into labor
+    gainResources(state,
+      {benefit: {labor: resources.population - resources.labor}},
+      clientID,
+    );
+  }
 }
 
 

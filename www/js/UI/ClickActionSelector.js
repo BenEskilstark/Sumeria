@@ -15,7 +15,9 @@ const baseHtml = (customHTML) => {
         <option value="FARM">Farm</option>
         <option value="FOREST">Forest</option>
         <option value="MOUNTAIN">Mountain</option>
-        <option value="HUT">Hut</option>
+        <option value="HUT">Hovel</option>
+        <option value="LUMBER_MILL">Lumber Mill</option>
+        <option value="MINE">Mine</option>
         <option value="GRANARY">Granary</option>
         <option value="MONUMENT">Monument</option>
       </select>
@@ -60,15 +62,6 @@ export default class ClickActionSelector extends StatefulHTML {
 
   getCustomHtml(selectedMode) {
     switch (selectedMode) {
-      case 'DIG':
-      case 'PILE':
-      case 'FARM':
-      case 'FOREST':
-      case 'MOUNTAIN':
-      case 'HUT':
-      case 'GRANARY':
-      case 'MONUMENT':
-        return "";
       case 'SPOUT':
         return `
           <div style="display:inline-block">
@@ -77,6 +70,7 @@ export default class ClickActionSelector extends StatefulHTML {
           </div>
         `;
     }
+    return "";
   }
 
 }

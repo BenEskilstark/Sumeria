@@ -7,10 +7,15 @@ import {Topo} from '../state/topo.js';
 import {
   makeFarm, makeForest, makeMountain,
   makeHut, makeGranary, makeMonument,
+  makeLumberMill, makeMine,
 } from '../state/entities.js';
 import {entityReducer} from './entityReducer.js';
 import {clickReducer} from './clickReducer.js';
 import {getEntitiesAtPos} from '../selectors/entitySelectors.js';
+import {
+  canAfford,
+} from '../selectors/resourceSelectors.js';
+import {spendResources, gainResources} from './resourceReducer.js';
 
 export const gameReducer = (state, action) => {
   if (state === undefined) return {};
@@ -27,20 +32,33 @@ export const gameReducer = (state, action) => {
       };
       return state;
     case 'DIG': {
+      const {x, y} = action;
+      const cost = {labor: 1};
       if (getEntitiesAtPos(state, action).length > 0) return state;
+      if (smartGet(state.topo.topo, {x, y})?.elevation != 1) return state;
+      if (!canAfford(state, {cost})) return state;
 
       state = clickReducer(state, {...action, type: 'CLICK'});
       state.topo.dig(action);
       state.topo.irrigate(state);
-      return {...state};
+
+      state = spendResources(state, {cost});
+      state = gainResources(state, {benefit: {clay: 12}});
+
+      return state;
     }
     case 'PILE': {
       const {x, y} = action;
+      const cost = {clay: 12, labor: 1};
       if (smartGet(state.topo.topo, {x, y})?.elevation != 0) return state;
+      if (!canAfford(state, {cost})) return state;
 
       state = clickReducer(state, {...action, type: 'CLICK'});
       state.topo.pile(action);
       state.topo.irrigate(state);
+
+      state = spendResources(state, {cost});
+
       return {...state};
     }
     case 'SPOUT': {
@@ -78,10 +96,12 @@ export const gameReducer = (state, action) => {
       if (smartGet(state.topo.topo, {x, y})?.elevation != 1) return state;
       if (getEntitiesAtPos(state, action).length > 0) return state;
 
+      const entity = makeFarm(action);
+      if (!canAfford(state, entity)) return state;
+      state = spendResources(state, entity);
+
       state = clickReducer(state, {...action, type: 'CLICK'});
-      state = entityReducer(state, {
-        type: 'ADD_ENTITY', entity: makeFarm(action),
-      });
+      state = entityReducer(state, {type: 'ADD_ENTITY', entity});
       state.topo.dig({...action, elevation: 0.5});
       state.topo.irrigate(state);
       return state;
@@ -91,10 +111,15 @@ export const gameReducer = (state, action) => {
       if (smartGet(state.topo.topo, {x, y})?.elevation != 1) return state;
       if (getEntitiesAtPos(state, action).length > 0) return state;
 
-      state = clickReducer(state, {...action, type: 'CLICK'});
       const entity = makeHut(action);
+      if (!canAfford(state, entity)) return state;
+      state = spendResources(state, entity);
+      state = gainResources(state, entity);
+
+      state = clickReducer(state, {...action, type: 'CLICK'});
       state = entityReducer(state, {type: 'ADD_ENTITY', entity});
       state.topo.addInfluenceSource({x, y, influence: entity.influence});
+
       return state;
     }
     case 'GRANARY': {
@@ -102,8 +127,11 @@ export const gameReducer = (state, action) => {
       if (smartGet(state.topo.topo, {x, y})?.elevation != 1) return state;
       if (getEntitiesAtPos(state, action).length > 0) return state;
 
-      state = clickReducer(state, {...action, type: 'CLICK'});
       const entity = makeGranary(action);
+      if (!canAfford(state, entity)) return state;
+      state = spendResources(state, entity);
+
+      state = clickReducer(state, {...action, type: 'CLICK'});
       state = entityReducer(state, {type: 'ADD_ENTITY', entity});
       state.topo.addInfluenceSource({x, y, influence: entity.influence});
       return state;
@@ -113,8 +141,39 @@ export const gameReducer = (state, action) => {
       if (smartGet(state.topo.topo, {x, y})?.elevation != 1) return state;
       if (getEntitiesAtPos(state, action).length > 0) return state;
 
-      state = clickReducer(state, {...action, type: 'CLICK'});
       const entity = makeMonument(action);
+      if (!canAfford(state, entity)) return state;
+      state = spendResources(state, entity);
+
+      state = clickReducer(state, {...action, type: 'CLICK'});
+      state = entityReducer(state, {type: 'ADD_ENTITY', entity});
+      state.topo.addInfluenceSource({x, y, influence: entity.influence});
+      return state;
+    }
+    case 'LUMBER_MILL': {
+      const {x, y} = action;
+      if (smartGet(state.topo.topo, {x, y})?.elevation != 1) return state;
+      if (getEntitiesAtPos(state, action).length > 0) return state;
+
+      const entity = makeLumberMill(action);
+      if (!canAfford(state, entity)) return state;
+      state = spendResources(state, entity);
+
+      state = clickReducer(state, {...action, type: 'CLICK'});
+      state = entityReducer(state, {type: 'ADD_ENTITY', entity});
+      state.topo.addInfluenceSource({x, y, influence: entity.influence});
+      return state;
+    }
+    case 'MINE': {
+      const {x, y} = action;
+      if (smartGet(state.topo.topo, {x, y})?.elevation != 1) return state;
+      if (getEntitiesAtPos(state, action).length > 0) return state;
+
+      const entity = makeMine(action);
+      if (!canAfford(state, entity)) return state;
+      state = spendResources(state, entity);
+
+      state = clickReducer(state, {...action, type: 'CLICK'});
       state = entityReducer(state, {type: 'ADD_ENTITY', entity});
       state.topo.addInfluenceSource({x, y, influence: entity.influence});
       return state;
@@ -123,4 +182,6 @@ export const gameReducer = (state, action) => {
 
   return state;
 };
+
+
 

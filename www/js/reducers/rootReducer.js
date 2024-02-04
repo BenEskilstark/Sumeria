@@ -3,6 +3,7 @@ import {sessionReducer} from './sessionReducer.js';
 import {queueReducer} from './queueReducer.js';
 import {turnReducer} from './turnReducer.js';
 import {gameReducer} from './gameReducer.js';
+import {resourceReducer} from './resourceReducer.js';
 import {
   smartGet, smartSet, fromKey, toKey,
 } from '../utils/arraysAndObjects.js';
@@ -23,6 +24,8 @@ export const rootReducer = (state, action) => {
     case 'HUT':
     case 'GRANARY':
     case 'MONUMENT':
+    case 'LUMBER_MILL':
+    case 'MINE':
     case 'SET_GAME_STATE':
       state = gameReducer(state, action);
       // fallthrough (?)
@@ -32,6 +35,9 @@ export const rootReducer = (state, action) => {
     //  should affect game state visible to all players)
     case 'END_TURN':
       return turnReducer(state, action);
+    case 'ADD_RESOURCES':
+    case 'UPDATE_RESOURCES':
+      return resourceReducer(state, action);
     case 'QUEUE_ACTION':
     case 'CLEAR_ACTION_QUEUE':
       return queueReducer(state, action);

@@ -54,6 +54,10 @@ export class Topo {
     return neighbors.filter(c => smartGet(this.topo, c));
   }
 
+  withinInfluence({x,y}) {
+    return smartGet(this.topo, {x,y})?.influence > 0;
+  }
+
 
   ///////////////////////
   // Setters

@@ -9,3 +9,25 @@ export const getEntitiesAtPos = ({entities}, {x, y}) => {
   }
   return entitiesAtPos;
 }
+
+
+export const getNeighborEntities = ({entities, topo}, {x, y}) => {
+  const neighborEntities = [];
+  topo.getNeighbors({x,y})
+    .forEach(c => {
+      neighborEntities.push(...getEntitiesAtPos({entities}, c));
+    });
+  return neighborEntities;
+}
+
+
+export const getEntitiesByType = (state, entityType) => {
+  const byType = [];
+  for (const entityID in state.entities) {
+    const entity = state.entities[entityID];
+    if (entity.type == entityType) {
+      byType.push(entity);
+    }
+  }
+  return byType;
+}

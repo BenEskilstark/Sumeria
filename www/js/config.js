@@ -18,7 +18,7 @@ export const config = {
 
   waterSpoutQuantity: 50,
 
-  forestGrowthTurns: [4, 5, 6, 6, 6, 7, 8],
+  forestGrowthTurns: [1,2,2,3],
 
   // ai
   apm: 150,

@@ -6,10 +6,13 @@ export const entityReducer = (state, action) => {
       const {entity} = action;
       state.nextEntityID += 1;
       state.entities[state.nextEntityID] = entity;
+      entity.id = state.nextEntityID;
       return state;
     }
     case 'REMOVE_ENTITY': {
-
+      const {entityID} = action;
+      delete state.entities[entityID];
+      return state;
     }
   }
 

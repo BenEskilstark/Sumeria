@@ -5,44 +5,25 @@
     - consume water in farms
     - don't spread influence through forests, mtns, etc
     - water still spreads too slowly
+    - only allow building within influence (except first building)
 
   - ideas:
     - floods
     - easter island
-      - all multiples of 6 if we stay sumerian
       - different scenarios (also the nile)
-    - digging produces 10 clay
-      - and requires population
-    - 5x pop per hut --> 20 food stored
-    - farms produce 2 food
-      - system for prioritizing how population is allocated
     - tablets which are sets of actions
+
+  - refactor:
+    - register entity makeFn's and consolidate gameReducer
 
   - level editor
     - separate mode that can be entered/exited
 
   - UI
+    - delete entity click action
     - json-card which can show info on hover
       - in UI/PlayerResources.js
     - tag for displaying indicator values tracking delta since last turn
+    - display costs
 
-  - resources
-    - buildings have cost attached to their entity
-    - selector which takes in a building and your resources and
-      says whether you can afford it
-      - mutator that takes in same params but actually spends them
-    - clay
-      - acquired after digging, spent when piling
-        - also spent on huts
-    - food
-      - acquired when farms are irrigated in your influence at EoT
-        - and require population to farm them
-      - stored in granaries (and huts?)
-        - add isFoodStore property
-    - population
-      - max is based off housing from huts
-        - add isHouse property
-      - needed to perform tasks -- how?
-    - wood
-      - need action for cutting down trees
 

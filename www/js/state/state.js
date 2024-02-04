@@ -38,6 +38,7 @@ export const initGameState = (players, clientID, level) => {
 
     posFromThisClick: {}, // SmartMap<Coord, bool>
     debug: true,
+    free: true,
 
   };
 
@@ -79,8 +80,9 @@ export const initMultiplayerState = (players, clientID, level) => {
   for (const id of players) {
     multState.playerResources[id] = {
       population: 0,
+      labor: 6,
+      food: 30,
       clay: 6,
-      food: 12,
       wood: 0,
       stone: 0,
     };

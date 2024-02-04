@@ -109,6 +109,26 @@ export default class GameBoard extends StatefulHTML {
           ctx.closePath();
           ctx.fill();
           break;
+        case 'LUMBER_MILL':
+          ctx.fillStyle = "silver";
+          ctx.beginPath();
+          ctx.arc(
+            x * sqWidth + sqWidth / 2, y * sqHeight + sqHeight / 2,
+            sqWidth / 2 - 2, 0, 2 * Math.PI,
+          );
+          ctx.closePath();
+          ctx.fill();
+          break;
+        case 'MINE':
+          ctx.fillStyle = "black";
+          ctx.beginPath();
+          ctx.arc(
+            x * sqWidth + sqWidth / 2, y * sqHeight + sqHeight / 2,
+            sqWidth / 2 - 2, 0, 2 * Math.PI,
+          );
+          ctx.closePath();
+          ctx.fill();
+          break;
 
       }
     }
