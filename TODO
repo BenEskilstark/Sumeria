@@ -6,6 +6,7 @@
     - don't spread influence through forests, mtns, etc
     - water still spreads too slowly
     - only allow building within influence (except first building)
+    - deleting building doesn't remove topo's influence source
 
   - ideas:
     - floods
@@ -20,10 +21,6 @@
     - separate mode that can be entered/exited
 
   - UI
-    - delete entity click action
-    - json-card which can show info on hover
-      - in UI/PlayerResources.js
     - tag for displaying indicator values tracking delta since last turn
-    - display costs
 
 

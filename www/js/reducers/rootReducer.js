@@ -4,6 +4,7 @@ import {queueReducer} from './queueReducer.js';
 import {turnReducer} from './turnReducer.js';
 import {gameReducer} from './gameReducer.js';
 import {resourceReducer} from './resourceReducer.js';
+import {entityReducer} from './entityReducer.js';
 import {
   smartGet, smartSet, fromKey, toKey,
 } from '../utils/arraysAndObjects.js';
@@ -15,6 +16,13 @@ export const rootReducer = (state, action) => {
   if (state === undefined) state = initState();
 
   switch (action.type) {
+    case 'ADD_RESOURCES':
+    case 'UPDATE_RESOURCES':
+      return resourceReducer(state, action);
+    case 'ADD_ENTITY':
+    case 'REMOVE_AT_POS':
+    case 'REMOVE_ENTITY':
+      return entityReducer(state, action);
     case 'DIG':
     case 'PILE':
     case 'SPOUT':
@@ -35,9 +43,6 @@ export const rootReducer = (state, action) => {
     //  should affect game state visible to all players)
     case 'END_TURN':
       return turnReducer(state, action);
-    case 'ADD_RESOURCES':
-    case 'UPDATE_RESOURCES':
-      return resourceReducer(state, action);
     case 'QUEUE_ACTION':
     case 'CLEAR_ACTION_QUEUE':
       return queueReducer(state, action);

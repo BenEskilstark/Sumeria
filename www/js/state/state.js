@@ -24,7 +24,7 @@ export const initGameState = (players, clientID, level) => {
     /////////////
     // local game state
     mouseDown: false,
-    clickMode: "DIG", // | "PILE" | "SPOUT" | "FARM"
+    clickMode: "HUT", // | "PILE" | "SPOUT" | "FARM"
 
     waterSpoutQuantity: config.waterSpoutQuantity,
 
@@ -38,7 +38,7 @@ export const initGameState = (players, clientID, level) => {
 
     posFromThisClick: {}, // SmartMap<Coord, bool>
     debug: true,
-    free: true,
+    free: false, // whether all buildings can always be afforded
 
   };
 

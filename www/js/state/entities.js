@@ -139,3 +139,14 @@ export const makeMonument = ({x, y}) => {
   };
 }
 
+
+export const makeFns = {
+  FOREST: makeForest,
+  MOUNTAIN: makeMountain,
+  FARM: makeFarm,
+  HUT: makeHut,
+  LUMBER_MILL: makeLumberMill,
+  MINE: makeMine,
+  GRANARY: makeGranary,
+  MONUMENT: makeMonument,
+};

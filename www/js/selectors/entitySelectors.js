@@ -5,6 +5,7 @@ export const getEntitiesAtPos = ({entities}, {x, y}) => {
     const entity = entities[entityID];
     if (entity.x == x && entity.y == y) {
       entitiesAtPos.push(entity);
+      if (!entity.id) entity.id = entityID; // HACK
     }
   }
   return entitiesAtPos;
@@ -27,6 +28,7 @@ export const getEntitiesByType = (state, entityType) => {
     const entity = state.entities[entityID];
     if (entity.type == entityType) {
       byType.push(entity);
+      if (!entity.id) entity.id = entityID; // HACK
     }
   }
   return byType;

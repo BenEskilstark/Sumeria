@@ -1,3 +1,5 @@
+import {getEntitiesAtPos} from '../selectors/entitySelectors.js';
+
 export const entityReducer = (state, action) => {
   if (state === undefined) return {};
 
@@ -7,6 +9,14 @@ export const entityReducer = (state, action) => {
       state.nextEntityID += 1;
       state.entities[state.nextEntityID] = entity;
       entity.id = state.nextEntityID;
+      return state;
+    }
+    case 'REMOVE_AT_POS': {
+      const {x, y} = action;
+      const entities = getEntitiesAtPos(state, {x, y});
+      for (const entity of entities) {
+        delete state.entities[entity.id];
+      }
       return state;
     }
     case 'REMOVE_ENTITY': {

@@ -3,23 +3,26 @@ import {
   initMultiplayerState,
   serializeState,
 } from '../state/state.js';
+import {makeFns} from '../state/entities.js';
+import {jsonDisplay} from '../UI/components/jsonDisplay.js';
 
 const baseHtml = (customHTML) => {
   return `
     <div class="sidebarCard">
       <h3>Action on Click</h3>
       <select name="clickMode" id="clickMode">
+        <option value="HUT">Hovel</option>
         <option value="DIG" selected="selected">Dig</option>
         <option value="PILE">Pile</option>
-        <option value="SPOUT">Water Spout</option>
         <option value="FARM">Farm</option>
-        <option value="FOREST">Forest</option>
-        <option value="MOUNTAIN">Mountain</option>
-        <option value="HUT">Hovel</option>
         <option value="LUMBER_MILL">Lumber Mill</option>
         <option value="MINE">Mine</option>
         <option value="GRANARY">Granary</option>
         <option value="MONUMENT">Monument</option>
+        <option value="REMOVE_AT_POS">Delete</option>
+        <option value="FOREST">Forest</option>
+        <option value="MOUNTAIN">Mountain</option>
+        <option value="SPOUT">Water Spout</option>
       </select>
       ${customHTML}
     </div>
@@ -69,6 +72,13 @@ export default class ClickActionSelector extends StatefulHTML {
             <input id="quantity-parameter" style="width: 4em"></input>
           </div>
         `;
+      case 'FARM':
+      case 'HUT':
+      case 'LUMBER_MILL':
+      case 'MINE':
+      case 'GRANARY':
+      case 'MONUMENT':
+        return jsonDisplay(makeFns[selectedMode]({x: 0, y: 0}).cost);
     }
     return "";
   }

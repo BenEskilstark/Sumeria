@@ -3,18 +3,15 @@ import {
   initMultiplayerState,
   serializeState,
 } from '../state/state.js';
+import {jsonDisplay} from '../UI/components/jsonDisplay.js';
 
 const baseHtml = (state) => {
   if (!state.playerResources) return "";
   const resources = state.playerResources[state.clientID];
-  let keyVals = "";
-  for (const key in resources) {
-    keyVals += `<div><b>${key}</b>: ${resources[key]}</div>`;
-  }
   return `
     <div class="sidebarCard">
       <h3>Resources</h3>
-      ${keyVals}
+      ${jsonDisplay(resources)}
     </div>
   `;
 }
