@@ -12,13 +12,13 @@ export const config = {
   },
   seasonMultipliers: {
     'NORMAL': 1,
-    'DRY': 0.25,
+    'DRY': 0.04,
     'WET': 1.75,
   },
 
   waterSpoutQuantity: 50,
 
-  forestGrowthTurns: [1,2,2,3],
+  forestGrowthTurns: [3,4,4,5],
 
   // ai
   apm: 150,

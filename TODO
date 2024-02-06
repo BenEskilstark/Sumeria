@@ -6,7 +6,10 @@
     - don't spread influence through forests, mtns, etc
     - water still spreads too slowly
     - only allow building within influence (except first building)
-    - deleting building doesn't remove topo's influence source
+    - delete:
+      - deleting building doesn't remove topo's influence source
+      - can't build where you deleted a farm because of elevation = 0.5
+    - make free actually free rather than going negative
 
   - ideas:
     - floods
