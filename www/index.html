@@ -13,10 +13,10 @@
 
           <game-board screen="GAME" display="flex">
             <canvas class="boardCanvas" width=700 height=700
-              onclick="this.closest('game-board').canvasClick(event)"
-              onmousemove="this.closest('game-board')?.canvasMouseMove(event)"
-              onmousedown="this.closest('game-board').canvasMouseDown(event)"
-              onmouseup="this.closest('game-board').canvasMouseUp(event)"
+              onclick="closest('game-board').canvasClick(event)"
+              onmousemove="closest('game-board')?.canvasMouseMove(event)"
+              onmousedown="closest('game-board').canvasMouseDown(event)"
+              onmouseup="closest('game-board').canvasMouseUp(event)"
             ></canvas>
             <game-controls>
               <turn-controls></turn-controls>
